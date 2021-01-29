@@ -2,21 +2,43 @@ GUIDE: https://docs.splunk.com/Documentation/Forwarder/8.1.1/Forwarder/Installan
 
 
 1. Download via command line.
-# .deb For Debian and Ubuntu
-$ wget -O splunk-8.0.3-a6754d8441bf-linux-2.6-amd64.deb 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.3&product=splunk&filename=splunk-8.0.3-a6754d8441bf-linux-2.6-amd64.deb&wget=true'
 
-# .rpm For Redhat and CentOS
-$ wget -O splunk-8.0.3-a6754d8441bf-linux-2.6-x86_64.rpm 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.3&product=splunk&filename=splunk-8.0.3-a6754d8441bf-linux-2.6-x86_64.rpm&wget=true'
+64 bit:
+http://download.splunk.com/releases/6.0/universalforwarder/linux/splunkforwarder-6.0-182037-Linux-x86_64.tgz
+http://download.splunk.com/releases/6.0.2/universalforwarder/linux/splunkforwarder-6.0.2-196940-linux-2.6-x86_64.rpm
+http://download.splunk.com/releases/6.0/universalforwarder/linux/splunkforwarder-6.0-182037-linux-2.6-amd64.deb
 
-# .tgz For all Linux platforms
-$ wget -O splunk-8.0.3-a6754d8441bf-Linux-x86_64.tgz 'https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=8.0.3&product=splunk&filename=splunk-8.0.3-a6754d8441bf-Linux-x86_64.tgz&wget=true'
+32 bit:
+http://download.splunk.com/releases/6.0/universalforwarder/linux/splunkforwarder-6.0-182037-Linux-i686.tgz
+http://download.splunk.com/releases/6.0.2/universalforwarder/linux/splunkforwarder-6.0.2-196940.i386.rpm
+http://download.splunk.com/releases/6.0/universalforwarder/linux/splunkforwarder-6.0-182037-linux-2.6-intel.deb
 
 2. Unpackage splunk forwarder
+tar xvzf splunk_package_name.tgz -C /opt
 dpkg -i splunk_package_name.deb
 
 3. Start and configure the universal forwarder.
-cd $SPLUNK_HOME/bin
+cd /opt/splunkforwarder/bin
 ./splunk start --accept-license
+./splunk enable boot -start
+./splunk edit user admin -password goodpassword -role admin -auth admin:changeme
 
-4. The universal forwarder prompts for administrator credentials the first time you start it. Type in the name you want to use for the administrator user. This is the user that you log into the universal forwarder with, not the user that you use to log into your machine or onto splunk.com. You can press Enter to use the default username of admin.
-
+4. Add monitors. 
+/opt/splunkforwarder/bin/splunk start
+/opt/splunkforwarder/bin/splunk add forward-server 174.20.241.20:8000
+/opt/splunkforwarder/bin/splunk add monitor /var/log/auth.log -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/apache2/access.log -index main -sourcetype weblog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/apache2/error.log -index main -sourcetype weblog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/httpd/access_log -index main -sourcetype weblog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/httpd/error_log -index main -sourcetype weblog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/secure -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/messages -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/httpd-errors.log -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/mysql.log -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/mysql.err -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/dpkg.log -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/syslog -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/log/authlog -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk add monitor /var/adm/sulog -index main -sourcetype syslog
+/opt/splunkforwarder/bin/splunk list forward-server
+/opt/splunkforwarder/bin/splunk restart
