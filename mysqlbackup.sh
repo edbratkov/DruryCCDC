@@ -15,7 +15,7 @@
 #mysql -u root -p
 #Password will be given.
 echo -n "Creating /backups directory..."
-mkdir /backups
+mkdir -p backups
 echo "Done."
 
 mysqldump -uroot -p --routines oscommerce > /backups/oscommerce.sql
