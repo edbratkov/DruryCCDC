@@ -1,3 +1,4 @@
+#!/bin/bash
 #mysql > show databases;
 
 #use mysql; 
