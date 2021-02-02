@@ -14,6 +14,8 @@
 #Access mysql to view users:
 #mysql -u root -p
 #Password will be given.
-
+echo -n "Creating /backups directory..."
 mkdir /backups
+echo "Done."
+
 mysqldump -uroot -p --routines oscommerce > /backups/oscommerce.sql
