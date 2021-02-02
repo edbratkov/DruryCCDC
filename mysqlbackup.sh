@@ -9,7 +9,7 @@
 
 #mysqldump -uroot -p --routines oscommerce > /backups/oscommerce.sql
 
-M#ake sure that database is inside backup folder.
+#Make sure that database is inside backup folder.
 
 #Access mysql to view users:
 #mysql -u root -p
